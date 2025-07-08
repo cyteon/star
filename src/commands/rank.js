@@ -10,8 +10,7 @@ const data = new SlashCommandBuilder()
             .setDescription("The user to check the rank of")
             .setRequired(false)
     )
-    .setIntegrationTypes(0, 1)
-    .setContexts(0, 1, 2);
+    .setIntegrationTypes(0);
 
 const execute = async (interaction) => {
     const user = interaction.options.getUser("user") || interaction.user;
@@ -40,7 +39,7 @@ const execute = async (interaction) => {
             : `**${user.tag}** is`;
 
         return interaction.reply({
-            content: `:chart_with_upwards_trend: ${msg} level **${level}** with **${xp}**/${LEVELS[level + 1]} XP!`,
+            content: `:chart_with_upwards_trend: ${msg} level **${level}** with **${xp}**/${LEVELS[level + 1]} XP to the next level :O`,
         });
     } catch (error) {
         console.error("Error fetching user data:", error);
