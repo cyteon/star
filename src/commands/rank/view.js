@@ -1,16 +1,15 @@
-import { SlashCommandBuilder } from "discord.js";
-import User from "../models/User.js";
-import { LEVELS } from "../utils/levels.js";
+import { SlashCommandSubcommandBuilder } from "discord.js";
+import User from "../../models/User.js";
+import { LEVELS } from "../../utils/levels.js";
 
-const data = new SlashCommandBuilder()
-    .setName("rank")
+const data = new SlashCommandSubcommandBuilder()
+    .setName("view")
     .setDescription("Check your, or someone else's, rank")
-    .addUserOption(option => 
+    .addUserOption(option =>
         option.setName("user")
             .setDescription("The user to check the rank of")
             .setRequired(false)
-    )
-    .setIntegrationTypes(0);
+    );
 
 const execute = async (interaction) => {
     const user = interaction.options.getUser("user") || interaction.user;

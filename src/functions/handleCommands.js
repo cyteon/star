@@ -1,20 +1,66 @@
-import { REST, Routes } from "discord.js";
+import { REST, Routes, SlashCommandBuilder } from "discord.js";
+import fs from "fs";
 
 export default (client) => {
-    client.handleCommands = async (files) => {
+    client.handleCommands = async (folder) => {
         client.commandArray = [];
 
-        console.log(`\nLoading ${files.length} commands...`);
+        console.log(`\nLoading ${folder.length} commands...`);
 
-        for (const file of files) {
-            try {
-                const { default: command } = await import(`../commands/${file}`);
-                client.commands.set(command.data.name, command);
-                client.commandArray.push(command.data.toJSON());
+        for (const path of folder) {
+            const isDir = fs.statSync(`src/commands/${path}`).isDirectory();
 
-                console.log(`Command ${command.data.name} loaded successfully`);
-            } catch (error) {
-                console.error(`Error loading command ${file}:`, error);
+            if (isDir) {
+                const subcommandFiles = fs.readdirSync(`src/commands/${path}`).filter(f => f.endsWith(".js"));
+
+                let cmd = new SlashCommandBuilder()
+                    .setName(path)
+                    .setDescription("(no description");
+                
+                for (const subcommandFile of subcommandFiles) {
+                    try {
+                        const { default: command } = await import(`../commands/${path}/${subcommandFile}`);
+                        cmd.addSubcommand(command.data);
+                        
+                        console.log(`Command /${path} ${command.data.name} loaded successfully`);
+                    } catch (error) {
+                        console.error(`Error loading command /${path} ${command.data.name}:`, error);
+                    }
+                }
+
+                const execute = async (interaction) => {
+                    const subcommand = interaction.options.getSubcommand();
+
+                    try {
+                        const { default: command } = await import(`../commands/${path}/${subcommand}.js`);
+
+                        await command.execute(interaction);
+                    } catch (error) {
+                        console.error(`Error executing command /${path} ${subcommand}:`, error);
+                        await interaction.reply({
+                            content: "An error occurred while executing this command.",
+                            ephemeral: true,
+                        });
+                    }
+                }
+
+                const data = {
+                    data: cmd,
+                    execute,
+                }
+
+                client.commands.set(path, data);
+                client.commandArray.push(data.data.toJSON());
+            } else {
+                try {
+                    const { default: command } = await import(`../commands/${path}`);
+                    client.commands.set(command.data.name, command);
+                    client.commandArray.push(command.data.toJSON());
+
+                    console.log(`Command /${command.data.name} loaded successfully`);
+                } catch (error) {
+                    console.error(`Error loading command /${path}:`, error);
+                }
             }
         }
 
