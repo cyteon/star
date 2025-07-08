@@ -1,6 +1,6 @@
 export default (client) => {
-    client.handleEvents = async (eventFiles, path) => {
-        for (const file of eventFiles) {
+    client.handleEvents = async (files) => {
+        for (const file of files) {
             const event = await import(`../events/${file}`);
             const handler = event.default || event;
 

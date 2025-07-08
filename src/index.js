@@ -4,18 +4,23 @@ import {
   Collection,
 } from "discord.js";
 import mongoose from "mongoose";
+import cache from "ts-cache-mongoose";
 import fs from "fs";
 
 import { config } from "dotenv";
 config();
 
 console.log("Connecting to MongoDB...");
+cache.init(mongoose, {
+    engine: "memory",
+});
 mongoose.connect(process.env.MONGODB_URL);
 
 console.log("Connected to MongoDB");
 
 const client = new Client({
     intents: [
+        GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
     ],
 });
