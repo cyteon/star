@@ -24,7 +24,7 @@ export default (client) => {
                         
                         console.log(`Command /${path} ${command.data.name} loaded successfully`);
                     } catch (error) {
-                        console.error(`Error loading command /${path} ${command.data.name}:`, error);
+                        console.error(`Error loading command /${path} ${subcommandFile.replace('.js', '')}:`, error);
                     }
                 }
 
