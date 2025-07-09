@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { type } from "os";
 
 const userSchema = new mongoose.Schema({
     id: { // has to be compatible with a db a discord.py bot uses too
@@ -13,8 +14,14 @@ const userSchema = new mongoose.Schema({
         set: (v) => BigInt(v),
         get: (v) => v.toString(),
     },
-    xp: Number,
-    level: Number,
+    xp: {
+        type: Number,
+        default: 0,
+    },
+    level: {
+        type: Number,
+        default: 0,
+    },
 });
 
 export default mongoose.model("User", userSchema, "users");
