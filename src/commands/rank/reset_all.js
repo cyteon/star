@@ -1,4 +1,4 @@
-import { SlashCommandSubcommandBuilder } from "discord.js";
+import { PermissionFlagsBits, SlashCommandSubcommandBuilder } from "discord.js";
 import User from "../../models/User.js";
 
 const data = new SlashCommandSubcommandBuilder()
@@ -6,7 +6,7 @@ const data = new SlashCommandSubcommandBuilder()
     .setDescription("Reset all users' levels and XP in the server");
 
 const execute = async (interaction) => {
-    if (!interaction.member.permissions.has("ManageMessages")) {
+    if (!interaction.member.permissions.has(PermissionFlagsBits.ManageMessages)) {
         return interaction.reply({
             content: "You do not have permission to use this command >:(",
             ephemeral: true,
