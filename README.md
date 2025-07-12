@@ -1,6 +1,6 @@
-# Leveling Bot
+# Star
 
-An leveling system bot for discord
+An discord bot with **leveling**, **reaction roles** and **starboard**
 
 ### Running yourself
 
