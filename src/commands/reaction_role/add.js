@@ -44,6 +44,8 @@ const execute = async (interaction, client) => {
         } else {
             emoji = emoji.replace(/<:\w+:/, "").replace(">", "");
         }
+    } else {
+        emoji = interaction.guild.emojis.cache.find(e => e.name === emoji) || emoji;
     }
 
     try {
@@ -67,6 +69,8 @@ const execute = async (interaction, client) => {
         try {
             const message = await interaction.channel.messages.fetch(messageId);
             if (message) {
+                
+
                 await message.react(emoji);
                 return interaction.reply({
                     content: "Reaction role added successfully, and i reacted to the message with it :D",

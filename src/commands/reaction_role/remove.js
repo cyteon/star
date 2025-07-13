@@ -36,6 +36,8 @@ const execute = async (interaction, client) => {
         } else {
             emoji = emoji.replace(/<:\w+:/, "").replace(">", "");
         }
+    } else {
+        emoji = interaction.guild.emojis.cache.find(e => e.name === emoji) || emoji;
     }
 
     try {
